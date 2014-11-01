@@ -1,0 +1,91 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <name>Barebones Scala Project</name>
+  <groupId>com.barebonesScala</groupId>
+  <artifactId>barebonesScala</artifactId>
+  <version>0.0.0</version>
+
+  <properties>
+    <scala.version>2.9.2</scala.version>
+    <scala.maven.plugin.version>3.2.0</scala.maven.plugin.version>
+    <service.mainclass>com.barebonesScala.HelloWorld</service.mainclass>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>net.alchim31.maven</groupId>
+        <artifactId>scala-maven-plugin</artifactId>
+        <version>${scala.maven.plugin.version}</version>
+        <executions>
+          <execution>
+            <id>main-scalac</id>
+            <goals>
+              <goal>compile</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>test-scalac</id>
+            <goals>
+              <goal>testCompile</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <jvmArgs>
+            <jvmArg>-XX:+UseConcMarkSweepGC</jvmArg>
+            <jvmArg>-XX:+CMSClassUnloadingEnabled</jvmArg>
+            <jvmArg>-XX:+CMSPermGenSweepingEnabled</jvmArg>
+          </jvmArgs>
+          <recompileMode>incremental</recompileMode>
+          <args>
+            <arg>-unchecked</arg>
+            <arg>-deprecation</arg>
+          </args>
+          <charset>UTF-8</charset>
+          <launchers>
+            <launcher>
+              <id>server</id>
+              <mainClass>${service.mainclass}</mainClass>
+            </launcher>
+          </launchers>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.3</version>
+        <configuration>
+          <transformers>
+            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+              <mainClass>${service.mainclass}</mainClass>
+            </transformer>
+          </transformers>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+    	<groupId>org.scala-lang</groupId>
+    	<artifactId>scala-library</artifactId>
+    	<version>${scala.version}</version>
+    </dependency>
+    <dependency>
+    	<groupId>junit</groupId>
+    	<artifactId>junit</artifactId>
+    	<version>4.11</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+</project>
